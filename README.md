@@ -6,9 +6,9 @@ An observer / event emitter implementation with promise support
 
 Given a blog post creator:
 
-```
+```typescript
 function BlogPostCreator {
-    onBlogPostCreated = new PromiseObserver(emit => this.emit = emit);
+    blogPostCreated = new PromiseObserver(emit => this.emit = emit);
 }
 
 BlogPostCreator.prototype.create = function(blogPost) {
@@ -22,16 +22,17 @@ BlogPostCreator.prototype.create = function(blogPost) {
 an AutomatedCategorizer can attach to its events
 
 
-```
-onPostCategorized = blogPostCreator.onBlogPostCreated(post =>
+```typescript
+postCategorized = blogPostCreator.blogPostCreated.subscribe(post =>
   autoCategorizePost(post).then(saveCategory).thenReturn(post));
 ```
 
 a SearchIndexer can add search terms to the index for that post
 
-onPostIndexed = blogPostCreator.onBlogPostCreated(post =>
+```typescript
+postIndexed = blogPostCreator.blogPostCreated.subscribe(post =>
   indexSearchWords(post).then(saveIndex).thenReturn(post));
-
+```
 
 Then, the email notification system can wait for the post to be
 categorized and indexed before sending a notification to all subscribers:
