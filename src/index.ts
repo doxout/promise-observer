@@ -1,15 +1,19 @@
 import Promise = require('bluebird');
 
-interface Observer<T> {
-    <U>(listener:(t:T) => U):Observer<U>
-    <U>(listener:(t:T) => Promise<U>):Observer<U>
-    next(predicate:(t:T) => boolean):Promise<T>
-    remove<U>(o:Observer<U>):void;
+module observer {
+    export interface Observer<T> {
+            <U>(listener:(t:T) => U):LinkedObserver<U>
+            <U>(listener:(t:T) => Promise<U>):LinkedObserver<U>
+            next(predicate:(t:T) => boolean):Promise<T>
+            remove<U>(o:Observer<U>):void;
+    }
+    export interface LinkedObserver<T> extends Observer<T> {
+        unlink():void;
+    }
 }
 
-interface LinkedObserver<T> extends Observer<T> {
-    unlink():void;
-}
+import Observer = observer.Observer;
+import LinkedObserver = observer.LinkedObserver;
 
 function composePromise<T, U, V>(f1:(u:U) => Promise<V>, f2:(t:T) => Promise<U>):(t:T) => Promise<V>
 function composePromise<T, U, V>(f1:(u:U) => Promise<V>, f2:(t:T) => U):(t:T) => Promise<V> {
@@ -51,8 +55,8 @@ function observer<T>(provide:(emit:(t:T) => Promise<void>) => void):Observer<T> 
             });
         });
     }
-    function subscribe<U>(listener:(t:T) => U):Observer<U>
-    function subscribe<U>(listener:(t:T) => Promise<U>):Observer<U> {
+    function subscribe<U>(listener:(t:T) => U):LinkedObserver<U>
+    function subscribe<U>(listener:(t:T) => Promise<U>):LinkedObserver<U> {
         var notify:(u:U) => Promise<void>;
         var obs = <LinkedObserver<U>>observer<U>(emit2 => notify = emit2);
         subscriptions.push({
@@ -73,5 +77,7 @@ function observer<T>(provide:(emit:(t:T) => Promise<void>) => void):Observer<T> 
     provide(emit);
     return self;
 }
+
+
 
 export = observer;
