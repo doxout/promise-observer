@@ -4,7 +4,7 @@ module observer {
     export interface Observer<T> {
             <U>(listener:(t:T) => U):LinkedObserver<U>
             <U>(listener:(t:T) => Promise<U>):LinkedObserver<U>
-            next(predicate:(t:T) => boolean):Promise<T>
+            next(predicate?:(t:T) => boolean):Promise<T>
             remove<U>(o:Observer<U>):void;
     }
     export interface LinkedObserver<T> extends Observer<T> {
