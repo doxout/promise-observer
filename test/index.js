@@ -4,7 +4,7 @@ var t = require('blue-tape');
 
 t.test('basic', function(t) {
     var start, values = [];
-    var onNumber = observer(function(emit) { start = emit; })
+    var onNumber = observer.create(function(emit) { start = emit; })
     var onIncrementedNumber = onNumber(function(val) {
         return Promise.delay(1).thenReturn(val + 1);
     })

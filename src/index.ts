@@ -1,34 +1,14 @@
 import Promise = require('bluebird');
 
-module observer {
-    export interface Observer<T> {
-            <U>(listener:(t:T) => U):LinkedObserver<U>
-            <U>(listener:(t:T) => Promise<U>):LinkedObserver<U>
-            next(predicate?:(t:T) => boolean):Promise<T>
-            remove<U>(o:Observer<U>):void;
-    }
-    export interface LinkedObserver<T> extends Observer<T> {
-        unlink():void;
-    }
+export interface Observer<T> {
+        <U>(listener:(t:T) => U):LinkedObserver<U>
+        <U>(listener:(t:T) => Promise<U>):LinkedObserver<U>
+        next(predicate?:(t:T) => boolean):Promise<T>
+        remove<U>(o:Observer<U>):void;
 }
 
-import Observer = observer.Observer;
-import LinkedObserver = observer.LinkedObserver;
-
-function composePromise<T, U, V>(f1:(u:U) => Promise<V>, f2:(t:T) => Promise<U>):(t:T) => Promise<V>
-function composePromise<T, U, V>(f1:(u:U) => Promise<V>, f2:(t:T) => U):(t:T) => Promise<V> {
-    return function (x) {
-        var p = f2(x);
-        if (p != null && typeof (<any>p).then === 'function')
-            return (<Promise<U>><any>p).then(f1);
-        return f1(p);
-    }
-}
-
-function apply<T, U>(f:(t:T) => U, t:T): () => U {
-    return function() {
-        return f(t);
-    }
+export interface LinkedObserver<T> extends Observer<T> {
+    unlink():void;
 }
 
 interface Subscription<T, U> {
@@ -37,7 +17,7 @@ interface Subscription<T, U> {
     target:Observer<U>
 }
 
-function observer<T>(provide:(emit:(t:T) => Promise<void>) => void):Observer<T> {
+export function create<T>(provide:(emit:(t:T) => Promise<void>) => void):Observer<T> {
 
     var subscriptions:Array<Subscription<T, any>> = [];
 
@@ -58,7 +38,7 @@ function observer<T>(provide:(emit:(t:T) => Promise<void>) => void):Observer<T> 
     function subscribe<U>(listener:(t:T) => U):LinkedObserver<U>
     function subscribe<U>(listener:(t:T) => Promise<U>):LinkedObserver<U> {
         var notify:(u:U) => Promise<void>;
-        var obs = <LinkedObserver<U>>observer<U>(emit2 => notify = emit2);
+        var obs = <LinkedObserver<U>>create<U>(emit2 => notify = emit2);
         subscriptions.push({
             emit: composePromise(notify, listener),
             target: obs
@@ -78,6 +58,19 @@ function observer<T>(provide:(emit:(t:T) => Promise<void>) => void):Observer<T> 
     return self;
 }
 
+function composePromise<T, U, V>(f1:(u:U) => Promise<V>, f2:(t:T) => Promise<U>):(t:T) => Promise<V>
+function composePromise<T, U, V>(f1:(u:U) => Promise<V>, f2:(t:T) => U):(t:T) => Promise<V> {
+    return function (x) {
+        var p = f2(x);
+        if (p != null && typeof (<any>p).then === 'function')
+            return (<Promise<U>><any>p).then(f1);
+        return f1(p);
+    }
+}
 
+function apply<T, U>(f:(t:T) => U, t:T): () => U {
+    return function() {
+        return f(t);
+    }
+}
 
-export = observer;

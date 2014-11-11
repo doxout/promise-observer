@@ -7,9 +7,9 @@ An observer / event emitter implementation with promise support
 Given a blog post creator:
 
 ```typescript
-import observer = require('promise-observer')
-function BlogPostCreator {
-    this.onCreated = observer(emit => this.emit = emit);
+import po = require('promise-observer')
+function BlogPostCreator() {
+    this.onCreated = po.create(emit => this.emit = emit);
 }
 BlogPostCreator.prototype.create = function(blogPost) {
     actuallyCreateBlogpost()
@@ -48,9 +48,9 @@ onPostNotification = blogPostCreator.onCreated(post => {
 # API
 
 
-### observer(emit):Observer
+### po.create(emit):Observer
 
-`observer(emit: (val:T) => Promise<void>):Observer<T>`
+`po.create(emit: (val:T) => Promise<void>):Observer<T>`
 
 Creates a new observer. The observer exposes its emit function through the
 revealing constructor pattern. Use the emit function to notify all subscribers
@@ -93,6 +93,7 @@ Removes a listener (linked observer).
 ### linkedObserver.unlink()
 
 Same as `parentObserver.remove(linkedObserver)`
+
 
 # License
 
