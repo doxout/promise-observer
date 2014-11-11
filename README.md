@@ -47,7 +47,10 @@ onPostNotification = blogPostCreator.onCreated(post => {
 
 # API
 
-### `observer(emit: (val:T) => Promise<void>):Observer<T>`
+
+### observer(emit):Observer
+
+`observer(emit: (val:T) => Promise<void>):Observer<T>`
 
 Creates a new observer. The observer exposes its emit function through the
 revealing constructor pattern. Use the emit function to notify all subscribers
@@ -68,7 +71,7 @@ interface Observer<T> {
 }
 ```
 
-### observer(listener):LinkedObserver
+#### observer(listener):LinkedObserver
 
 Creates a listener for the observer. A listener is a mapping function that returns
 either a new value or a promise.
@@ -76,14 +79,14 @@ either a new value or a promise.
 Returns a linked observer that emits whenever the returned promises or values
 resolve.
 
-### observer.next(predicate?):Promise
+#### observer.next(predicate?):Promise
 
 Waits for the next event that satisfies the specified predicate. Returns a
 promise for the value contained in that event.
 
 The predicate is optional.
 
-### observer.remove(linkedObserver):void;
+#### observer.remove(linkedObserver)
 
 Removes a listener (linked observer).
 
