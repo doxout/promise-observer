@@ -20,5 +20,16 @@
   },
   "devDependencies": {
     "blue-tape": "^0.1.8"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/doxout/promise-observer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/doxout/promise-observer/issues"
+  },
+  "homepage": "https://github.com/doxout/promise-observer"
 }
