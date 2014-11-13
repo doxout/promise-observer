@@ -18,18 +18,18 @@ interface Subscription<T, U> {
     target:Observer<U>
 }
 
-export function create<T>(provide:(emit:(t:T) => Promise<void>) => void):Observer<T> {
+export function create<T>(provide:(emit:(t:T) => Promise<void>) => void) {
 
     var subscriptions:Array<Subscription<T, any>> = [];
 
-    function emit(t:T):Promise<void> {
+    function emit(t:T) {
         var count = subscriptions.length;
         var results = new Array(count);
         for (var k = 0; k < count; ++k)
             results[k] = subscriptions[k].emit(t);
         return helpers.waitAll(results);
     }
-    function next(predicate:(t:T) => boolean):Promise<T> {
+    function next(predicate:(t:T) => boolean) {
         return new Promise<T>((resolve:(t:T) => void) => {
             var sub = subscribe(item => {
                 if (predicate == null || predicate(item)) {
@@ -40,7 +40,7 @@ export function create<T>(provide:(emit:(t:T) => Promise<void>) => void):Observe
         });
     }
     function subscribe<U>(listener:(t:T) => U):LinkedObserver<U>
-    function subscribe<U>(listener:(t:T) => Promise<U>):LinkedObserver<U> {
+    function subscribe<U>(listener:(t:T) => Promise<U>) {
         var notify:(u:U) => Promise<void>;
         var obs = <LinkedObserver<U>>create<U>(emit2 => notify = emit2);
         subscriptions.push({
