@@ -50,7 +50,7 @@ export function create<T>(provide:(emit:(t:T) => Promise<void>) => void) {
         obs.unlink = helpers.apply(remove, obs);
         return obs;
     }
-    function remove<U>(target:Observer<U>) {
+    function remove<U>(target:LinkedObserver<U>) {
         for (var k = 0; k < subscriptions.length; ++k)
             if (subscriptions[k].target == target)
                 return subscriptions.splice(k, 1);

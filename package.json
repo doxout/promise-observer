@@ -2,7 +2,7 @@
   "name": "promise-observer",
   "version": "1.0.7",
   "description": "An observer / event emitter implementation with promise support",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "tape test/*.js"
   },
