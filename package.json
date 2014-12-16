@@ -16,7 +16,8 @@
   "author": "spion",
   "license": "MIT",
   "devDependencies": {
-    "blue-tape": "^0.1.8"
+    "blue-tape": "^0.1.8",
+    "tsc-wrap-definition": "^1.0.4"
   },
   "directories": {
     "test": "test"

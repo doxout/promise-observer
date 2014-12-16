@@ -9,5 +9,8 @@ export interface Observer<T> {
 export interface LinkedObserver<T> extends Observer<T> {
     unlink(): void;
 }
-export function create<T>(provide: (emit: (t: T) => Promise<void>) => void): Observer<T>;
+export interface Options {
+    emitTimeout?: number;
+}
+export function create<T>(provide: (emit: (t: T) => Promise<void>) => void, opts?: Options): Observer<T>;
 }
