@@ -22,3 +22,17 @@ t.test('basic', function(t) {
     });
 });
 
+
+t.test('cycles', function(t) {
+    var start;
+    var onNumber = observer.create(function(emit) { start = emit; })
+    var on2 = onNumber(function(val) {
+        return Promise.delay(1).thenReturn(val + 1);
+    });
+    var on3 = on2(function(val) {
+        return Promise.delay(1).then(function() {
+            return start(val+1);
+        });
+    });
+    return start(0);
+})

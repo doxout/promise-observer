@@ -15,9 +15,6 @@
   ],
   "author": "spion",
   "license": "MIT",
-  "dependencies": {
-    "bluebird": "^2.3.11"
-  },
   "devDependencies": {
     "blue-tape": "^0.1.8"
   },

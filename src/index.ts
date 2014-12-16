@@ -18,8 +18,12 @@ interface Subscription<T, U> {
     target:Observer<U>
 }
 
-export function create<T>(provide:(emit:(t:T) => Promise<void>) => void) {
+export interface Options {
+    emitTimeout?: number;
+}
+export function create<T>(provide:(emit:(t:T) => Promise<void>) => void, opts?:Options) {
 
+    opts = opts || {};
     var subscriptions:Array<Subscription<T, any>> = [];
 
     function emit(t:T) {
@@ -27,7 +31,10 @@ export function create<T>(provide:(emit:(t:T) => Promise<void>) => void) {
         var results = new Array(count);
         for (var k = 0; k < count; ++k)
             results[k] = subscriptions[k].emit(t);
-        return helpers.waitAll(results);
+        var wait = helpers.waitAll(results);
+        if (opts.emitTimeout != null)
+            wait = wait.timeout(opts.emitTimeout);
+        return wait;
     }
     function next(predicate:(t:T) => boolean) {
         return new Promise<T>((resolve:(t:T) => void) => {

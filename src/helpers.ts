@@ -22,7 +22,7 @@ export function waitAll(promises:Promise<any>[]):Promise<void> {
     return new Promise<void>((resolve, reject) => {
         var count = () => { if (--n === 0) resolve(void 0) };
         for (var k = 0; k < n; ++k)
-            Promise.resolve(promises[k]).then(count);
+            Promise.resolve(promises[k]).done(count, reject);
     });
 }
 
