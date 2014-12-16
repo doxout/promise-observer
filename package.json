@@ -29,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/doxout/promise-observer/issues"
   },
-  "homepage": "https://github.com/doxout/promise-observer"
+  "homepage": "https://github.com/doxout/promise-observer",
+  "dependencies": {
+    "bluebird": "^2.3.11"
+  }
 }
