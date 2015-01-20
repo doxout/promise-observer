@@ -27,10 +27,9 @@ export function create<T>(provide:(emit:(t:T) => Promise<void>) => void, opts?:O
     var subscriptions:Array<Subscription<T, any>> = [];
 
     function emit(t:T) {
-        var count = subscriptions.length;
-        var results = new Array(count);
-        for (var k = 0; k < count; ++k)
-            results[k] = subscriptions[k].emit(t);
+        var results:any[] = [];
+        for (var k = 0; k < subscriptions.length; ++k)
+            results.push(subscriptions[k].emit(t))
         var wait = helpers.waitAll(results);
         if (opts.emitTimeout != null)
             wait = wait.timeout(opts.emitTimeout);
