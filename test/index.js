@@ -25,7 +25,7 @@ t.test('basic', function(t) {
 
 t.test('cycles', function(t) {
     var start;
-    var onNumber = observer.create(function(emit) { start = emit; })
+    var onNumber = observer.create(function(emit) { start = emit; }, {emitTimeout: 100})
     var on2 = onNumber(function(val) {
         return Promise.delay(1).thenReturn(val + 1);
     });
@@ -34,5 +34,8 @@ t.test('cycles', function(t) {
             return start(val+1);
         });
     });
-    return start(0);
+    return start(0).catch(function(e) {
+        t.ok(e, "should have timeout error");
+        setTimeout(process.exit, 10);
+    });
 })

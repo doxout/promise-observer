@@ -28,12 +28,13 @@ export function create<T>(provide:(emit:(t:T) => Promise<void>) => void, opts?:O
 
     function emit(t:T) {
         var results:any[] = [];
-        for (var k = 0; k < subscriptions.length; ++k)
-            results.push(subscriptions[k].emit(t))
-        var wait = helpers.waitAll(results);
-        if (opts.emitTimeout != null)
-            wait = wait.timeout(opts.emitTimeout);
-        return wait;
+        for (var k = 0; k < subscriptions.length; ++k) {
+            var emitPromise = subscriptions[k].emit(t);
+            if (opts.emitTimeout != null)
+                emitPromise = emitPromise.timeout(opts.emitTimeout);
+            results.push(emitPromise)
+        }
+        return helpers.waitAll(results);
     }
     function next(predicate:(t:T) => boolean) {
         return new Promise<T>((resolve:(t:T) => void) => {
