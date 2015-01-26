@@ -24,12 +24,12 @@ export interface Options {
 }
 
 export interface TimeoutError extends Error {
-    timeoutListener:string;
+    timedoutListener:string;
 }
 
-function timeoutAttach(listener:Function) {
+function attachTimedoutListener(listener:Function) {
     return function(e:TimeoutError) {
-        e.timeoutListener = listener.toString()
+        e.timedoutListener = listener.toString()
         throw e;
     }
 }
@@ -48,7 +48,7 @@ export function create<T>(provide:(emit:(t:T) => Promise<void>) => void, opts?:O
             var emitPromise = current.emit(t);
             if (opts.emitTimeout != null)
                 emitPromise = emitPromise.timeout(opts.emitTimeout)
-                .caught(TimeoutError, timeoutAttach(current.listener));
+                .caught(TimeoutError, attachTimedoutListener(current.listener));
             results.push(emitPromise)
             if (current === subscriptions[k]) ++k;
         }

@@ -59,7 +59,7 @@ t.test('timeouts', function timeouts(t) {
     fast(onNumber);
     slow(onNumber);
     return start(0).catch(function(e) {
-        t.ok(e.timeoutListener.indexOf('slow') >= 0, 'should point to slow fn')
+        t.ok(e.timedoutListener.indexOf('slow') >= 0, 'should point to slow fn')
     });
 });
 

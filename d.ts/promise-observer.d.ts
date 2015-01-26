@@ -13,7 +13,7 @@ export interface Options {
     emitTimeout?: number;
 }
 export interface TimeoutError extends Error {
-    timeoutListener: string;
+    timedoutListener: string;
 }
 export function create<T>(provide: (emit: (t: T) => Promise<void>) => void, opts?: Options): Observer<T>;
 }
