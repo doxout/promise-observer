@@ -1,6 +1,6 @@
 {
   "name": "promise-observer",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "An observer / event emitter implementation with promise support",
   "main": "lib/index.js",
   "scripts": {
