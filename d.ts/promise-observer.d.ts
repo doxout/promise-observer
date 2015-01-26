@@ -12,5 +12,8 @@ export interface LinkedObserver<T> extends Observer<T> {
 export interface Options {
     emitTimeout?: number;
 }
+export interface TimeoutError extends Error {
+    timeoutListener: string;
+}
 export function create<T>(provide: (emit: (t: T) => Promise<void>) => void, opts?: Options): Observer<T>;
 }

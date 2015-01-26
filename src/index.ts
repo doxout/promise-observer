@@ -15,12 +15,27 @@ export interface LinkedObserver<T> extends Observer<T> {
 interface Subscription<T, U> {
     emit(t:T):U;
     emit(t:T):Promise<U>;
-    target:Observer<U>
+    target:Observer<U>;
+    listener?:(t:T) => U | Promise<U>;
 }
 
 export interface Options {
     emitTimeout?: number;
 }
+
+export interface TimeoutError extends Error {
+    timeoutListener:string;
+}
+
+function timeoutAttach(listener:Function) {
+    return function(e:TimeoutError) {
+        e.timeoutListener = listener.toString()
+        throw e;
+    }
+}
+
+var TimeoutError = (<any>Promise).TimeoutError;
+
 export function create<T>(provide:(emit:(t:T) => Promise<void>) => void, opts?:Options) {
 
     opts = opts || {};
@@ -28,11 +43,14 @@ export function create<T>(provide:(emit:(t:T) => Promise<void>) => void, opts?:O
 
     function emit(t:T) {
         var results:any[] = [];
-        for (var k = 0; k < subscriptions.length; ++k) {
-            var emitPromise = subscriptions[k].emit(t);
+        for (var k = 0; k < subscriptions.length; k) {
+            var current = subscriptions[k]
+            var emitPromise = current.emit(t);
             if (opts.emitTimeout != null)
-                emitPromise = emitPromise.timeout(opts.emitTimeout);
+                emitPromise = emitPromise.timeout(opts.emitTimeout)
+                .caught(TimeoutError, timeoutAttach(current.listener));
             results.push(emitPromise)
+            if (current === subscriptions[k]) ++k;
         }
         return helpers.waitAll(results);
     }
@@ -52,7 +70,8 @@ export function create<T>(provide:(emit:(t:T) => Promise<void>) => void, opts?:O
         var obs = <LinkedObserver<U>>create<U>(emit2 => notify = emit2);
         subscriptions.push({
             emit: helpers.composePromise(notify, listener),
-            target: obs
+            target: obs,
+            listener: listener
         });
         obs.unlink = helpers.apply(remove, obs);
         return obs;
