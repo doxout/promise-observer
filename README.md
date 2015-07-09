@@ -76,8 +76,8 @@ interface Observable<T> {
 Creates a listener for the observable. A listener is a mapping function that returns
 either a new value or a promise.
 
-Returns a linked observable which is also an observable that emits whenever the returned 
-promises or values resolve.
+Returns a linked observable  that emits whenever the returned  promises or values 
+resolve.
 
 #### observable.next(predicate?):Promise
 
