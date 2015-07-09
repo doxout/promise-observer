@@ -48,9 +48,9 @@ onPostNotification = blogPostCreator.onCreated(post => {
 # API
 
 
-### po.create(emit):Observer
+### po.create(emit):Observable
 
-`po.create(emit: (val:T) => Promise<void>):Observer<T>`
+`po.create(emit: (val:T) => Promise<void>):Observable<T>`
 
 Creates a new observable. The observable exposes its emit function through the
 revealing constructor pattern. Use the emit function to notify all subscribers
@@ -60,39 +60,39 @@ The emit function returns a promise that resolves when all subscribers and
 their dependents finish processing the event.
 
 
-### Observer<T>
+### Observable<T>
 
 ```typescript
-interface Observer<T> {
-    <U>(listener: (t: T) => U): LinkedObserver<U>;
-    <U>(listener: (t: T) => Promise<U>): LinkedObserver<U>;
+interface Observable<T> {
+    <U>(listener: (t: T) => U): LinkedObservable<U>;
+    <U>(listener: (t: T) => Promise<U>): LinkedObservable<U>;
     next(predicate?: (t: T) => boolean): Promise<T>;
-    remove<U>(o: Observer<U>): void;
+    remove<U>(o: Observable<U>): void;
 }
 ```
 
-#### observer(listener):LinkedObserver
+#### observable(listener):LinkedObservable
 
 Creates a listener for the observable. A listener is a mapping function that returns
 either a new value or a promise.
 
-Returns a linked observer which is also an observable that emits whenever the returned 
+Returns a linked observable which is also an observable that emits whenever the returned 
 promises or values resolve.
 
-#### observer.next(predicate?):Promise
+#### observable.next(predicate?):Promise
 
 Waits for the next event that satisfies the specified predicate. Returns a
 promise for the value contained in that event.
 
 The predicate is optional.
 
-#### observer.remove(linkedObserver)
+#### observable.remove(linkedObservable)
 
 Removes a listener (linked observable).
 
-### linkedObserver.unlink()
+### linkedObservable.unlink()
 
-Same as `parentObserver.remove(linkedObserver)`
+Same as `parentObservable.remove(linkedObservable)`
 
 
 # License
