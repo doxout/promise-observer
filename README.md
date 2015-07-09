@@ -1,6 +1,6 @@
 # promise-observer
 
-An observer / event emitter implementation with promise support
+An observable / event emitter implementation with promise support
 
 # Example
 
@@ -52,7 +52,7 @@ onPostNotification = blogPostCreator.onCreated(post => {
 
 `po.create(emit: (val:T) => Promise<void>):Observer<T>`
 
-Creates a new observer. The observer exposes its emit function through the
+Creates a new observable. The observable exposes its emit function through the
 revealing constructor pattern. Use the emit function to notify all subscribers
 of new events.
 
@@ -73,11 +73,11 @@ interface Observer<T> {
 
 #### observer(listener):LinkedObserver
 
-Creates a listener for the observer. A listener is a mapping function that returns
+Creates a listener for the observable. A listener is a mapping function that returns
 either a new value or a promise.
 
-Returns a linked observer that emits whenever the returned promises or values
-resolve.
+Returns a linked observer which is also an observable that emits whenever the returned 
+promises or values resolve.
 
 #### observer.next(predicate?):Promise
 
@@ -88,7 +88,7 @@ The predicate is optional.
 
 #### observer.remove(linkedObserver)
 
-Removes a listener (linked observer).
+Removes a listener (linked observable).
 
 ### linkedObserver.unlink()
 
