@@ -20,7 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "blue-tape": "^0.1.8",
-    "tsc-wrap-definition": "^1.0.4"
+    "dts-generator": "^1.5.0"
   },
   "directories": {
     "test": "test"
