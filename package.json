@@ -4,6 +4,9 @@
   "description": "An observer / event emitter implementation with promise support",
   "main": "lib/index.js",
   "scripts": {
+    "build": "npm run build-js && npm run build-defs",
+    "build-js": "tsc",
+    "build-defs": "dts-generator --name promise-observer --baseDir ./src --out d.ts/promise-observer.d.ts --main promise-observer/index ./src/index.ts",
     "test": "tape test/*.js"
   },
   "keywords": [
