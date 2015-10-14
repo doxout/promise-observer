@@ -18,6 +18,7 @@ t.test('basic', function(t) {
         t.deepEqual(values, [1,2], 'values should be there and in correct order');
     });
 });
+
 function any() { return true; }
 
 t.test('two nexts', function twoNexts(t) {

@@ -1,6 +1,11 @@
 # promise-observer
 
-An observable / event emitter implementation with promise support
+An observer implementation with promise support.
+
+Its meant to behave similarly to typical synchronous
+[Java / NET observers](https://msdn.microsoft.com/en-us/library/ff648108.aspx),
+where once you notify your subscribers you are able to wait for their update
+functions to execute before proceeding
 
 # Example
 
